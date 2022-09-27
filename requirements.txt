@@ -1,0 +1,11 @@
+asn1crypto==1.5.1
+base58==2.1.1
+bitstring==3.1.9
+cffi==1.15.1
+coincurve==17.0.0
+cryptography==36.0.2
+pycparser==2.21
+pyln-bolt7==1.0.246
+pyln-client==0.12.1
+pyln-proto==0.12.0
+PySocks==1.7.1
