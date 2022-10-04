@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from pyln.client import Plugin
+from pyln.client import Plugin, LightningRpc
 from sqlalchemy import Column, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
@@ -78,6 +78,28 @@ def podcast_payments(plugin, **kwargs):
             'count': session.query(PodcastPayment).count(),
             'payments': session.query(PodcastPayment).all()
         }
+
+@plugin.method("podcastboost")
+def podcastboost(
+    plugin,
+    destination,
+    amount_msat,
+    payment_info,
+    rpcfile="$HOME/.lightning/bitcoin/lightning-rpc",
+):
+    """Send a podcast payment.
+    """
+    l = LightningRpc(rpcfile)
+
+    l.keysend(destination,
+              amount_msat=amount_msat,
+              extratlvs={7629169: json.dumps(payment_info).encode().hex()})
+
+    return {
+        'destination': destination,
+        'amount_msat': amount_msat,
+        'payment_info': payment_info
+    }
 
 plugin.add_option(
     "podcastpayments-dir",
